@@ -1,8 +1,10 @@
 {
-  "name": "",
-  "version": "0.0.1",
+  "name": "expression-run",
+  "version": "0.1.0",
   "description": "",
-  "keywords": [],
+  "keywords": [
+    "expression"
+  ],
   "main": "./bundles/index.umd.js",
   "module": "./esm5/index.js",
   "es2015": "./esm2015/index.js",
