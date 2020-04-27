@@ -1,5 +1,6 @@
 import * as esprima from 'esprima'
 const Compare = function(left: any, operator: string, right: any) {
+  console.log(operator, 'operator')
   switch (operator) {
     case '+':
       return left + right
@@ -69,6 +70,7 @@ type JSNode = {
   value: Value
   name: string
   consequent: JSNode
+  alternate: JSNode
   test: JSNode
   left: JSNode
   right: JSNode
@@ -91,7 +93,7 @@ const run = function<T extends { [key: string]: any }>(
   if (node.type === 'ConditionalExpression') {
     let result = run<T>(node.test, objValue)
     if (result) return run<T>(node.consequent, objValue)
-    else return run<T>(node.consequent, objValue)
+    else return run<T>(node.alternate, objValue)
   }
 
   if (node.type === 'BinaryExpression' || node.type === 'LogicalExpression') {

@@ -24,4 +24,18 @@ describe(`Greeter`, () => {
     )
     expect(res).toBe(true)
   })
+
+  it(`ternary expression`, () => {
+    let resA = ExpressionRun<{ root: { a: number; b: number } }>(
+      '(root.a + root.b) > root.a ? 99 : 100',
+      { root: { a: 1, b: 2 } }
+    )
+    expect(resA).toBe(99)
+
+    let resB = ExpressionRun<{ root: { a: number; b: number } }>(
+      '(root.a + root.b) < root.a ? 99 : 100',
+      { root: { a: 1, b: 2 } }
+    )
+    expect(resB).toBe(100)
+  })
 })
