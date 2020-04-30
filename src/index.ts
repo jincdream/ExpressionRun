@@ -1,6 +1,5 @@
 import * as esprima from 'esprima'
 const Compare = function(left: any, operator: string, right: any) {
-  console.log(operator, 'operator')
   switch (operator) {
     case '+':
       return left + right
