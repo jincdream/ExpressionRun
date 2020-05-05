@@ -78,6 +78,7 @@ type JSNode = {
   prefix: boolean
   object: JSNode
   property: JSNode
+  computed: boolean
 }
 const run = function<T extends { [key: string]: any }>(
   node: JSNode,
@@ -110,8 +111,12 @@ const run = function<T extends { [key: string]: any }>(
   }
 
   if (node.type === 'MemberExpression') {
-    let propValue = run<T>(node.object, objValue) as object
-    return run(node.property, propValue)
+    let propValue = run<T>(node.object, objValue) as { [key: string]: any }
+    if (node.computed) {
+      return propValue[run<T>(node.property, objValue) as string]
+    } else {
+      return run<object>(node.property, propValue)
+    }
   }
   return objValue
 }
