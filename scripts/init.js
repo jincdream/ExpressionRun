@@ -341,7 +341,6 @@ function getUserInfo() {
 
 /**
  * @param {Pick<import('./types').LibConfig,'username' | 'usermail'>} config
- * @returns {import('prompts').PromptObject[]}
  */
 function createQuestions(config) {
   return [
@@ -424,7 +423,6 @@ function createQuestions(config) {
 
 /**
  *
- * @param {import('prompts').PromptObject} prompt
  * @param {any} answers
  * @returns {void | boolean}
  */

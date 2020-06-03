@@ -1,4 +1,4 @@
-import * as esprima from 'esprima'
+import { parseScript } from 'esprima'
 const Compare = function(left: any, operator: string, right: any) {
   switch (operator) {
     case '+':
@@ -84,45 +84,43 @@ const run = function<T extends { [key: string]: any }>(
   node: JSNode,
   objValue: T
 ): Value {
-  if (node.type === 'Literal') {
-    return node.value
-  }
-  if (node.type === 'Identifier') {
-    return objValue[node.name]
-  }
-  if (node.type === 'ConditionalExpression') {
-    let result = run<T>(node.test, objValue)
-    if (result) return run<T>(node.consequent, objValue)
-    else return run<T>(node.alternate, objValue)
-  }
-
-  if (node.type === 'BinaryExpression' || node.type === 'LogicalExpression') {
-    let left = run<T>(node.left, objValue)
-    let right = run<T>(node.right, objValue)
-    return Compare(left, node.operator, right)
-  }
-
-  if (node.type === 'UpdateExpression') {
-    return Update(
-      run<T>(node.argument, objValue) as number,
-      node.operator as Operator,
-      node.prefix
-    )
-  }
-
-  if (node.type === 'MemberExpression') {
-    let propValue = run<T>(node.object, objValue) as { [key: string]: any }
-    if (node.computed) {
-      return propValue[run<T>(node.property, objValue) as string]
-    } else {
-      return run<object>(node.property, propValue)
+  switch (node.type) {
+    case 'Literal':
+      return node.value
+    case 'Identifier':
+      return objValue[node.name]
+    case 'ConditionalExpression': {
+      let result = run<T>(node.test, objValue)
+      if (result) return run<T>(node.consequent, objValue)
+      else return run<T>(node.alternate, objValue)
     }
+    case 'BinaryExpression':
+    case 'LogicalExpression': {
+      let left = run<T>(node.left, objValue)
+      let right = run<T>(node.right, objValue)
+      return Compare(left, node.operator, right)
+    }
+    case 'UpdateExpression':
+      return Update(
+        run<T>(node.argument, objValue) as number,
+        node.operator as Operator,
+        node.prefix
+      )
+    case 'MemberExpression': {
+      let propValue = run<T>(node.object, objValue) as { [key: string]: any }
+      if (node.computed) {
+        return propValue[run<T>(node.property, objValue) as string]
+      } else {
+        return run<object>(node.property, propValue)
+      }
+    }
+    default:
+      return objValue
   }
-  return objValue
 }
 
 export default function ExpressionRun<T = any>(expression: string, value: T) {
-  let program = esprima.parseScript(expression)
+  let program = parseScript(expression)
   if (program.body[0].type !== 'ExpressionStatement') return false
   let exp = program.body[0].expression as JSNode
   return run<T>(exp, value)

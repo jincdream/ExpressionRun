@@ -39,12 +39,18 @@ describe(`Greeter`, () => {
     expect(resB).toBe(100)
   })
 
-  it(`value`, () => {
-    let resA = ExpressionRun<{ root: { a: number[] } }>(
-      'root.a[0]',
-      { root: { a: [1] } }
-    )
+  it(`member expression computed`, () => {
+    let resA = ExpressionRun<{ root: { a: number[] } }>('root.a[0]', {
+      root: { a: [1] },
+    })
     expect(resA).toBe(1)
-  })
 
+    let resB = ExpressionRun<{ root: { a: number[]; b: { c: number } } }>(
+      'root.a[root.b.c]',
+      {
+        root: { a: [1], b: { c: 0 } },
+      }
+    )
+    expect(resB).toBe(1)
+  })
 })
