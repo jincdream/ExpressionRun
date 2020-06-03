@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.2"></a>
+## [0.2.2](https://github.com/jincdream/selector/compare/v0.2.1...v0.2.2) (2020-06-03)
+
+
+### Bug Fixes
+
+* umd build ([d780b6a](https://github.com/jincdream/selector/commit/d780b6a))
+
+
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/jincdream/selector/compare/v0.2.0...v0.2.1) (2020-05-05)
 
